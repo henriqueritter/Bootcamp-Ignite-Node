@@ -6,7 +6,7 @@ app.get("/method_send", (request, response) => {
 });
 
 app.get("/method_json", (request, response) => {
-  return response.json({ message: "Hello JSON" });
+  return response.json({ message: "Hello JSON Nodemon" });
 });
 
 app.listen(3333);

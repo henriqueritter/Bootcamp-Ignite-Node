@@ -111,8 +111,42 @@ app.post("/withdraw", verifyIfExistsAccountCPF, (request, response) => {
   return response.status(201).send();
 });
 
-app.get("/customers", (request, response) => {
-  return response.json(customers);
+// exemplo: http://localhost:3333/statement/date?date=2021-06-15
+app.get("/statement/date", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  const { date } = request.query;
+
+  // hackzinho para pegar o dia que é passado via query param
+  const dateFormat = new Date(date + " 00:00");
+
+  // filtra a data procurando onde ela seja igual a do statement
+  const statement = customer.statement.filter(
+    (statement) =>
+      statement.created_at.toDateString() ===
+      new Date(dateFormat).toDateString()
+  );
+
+  // se não encontrar retorna erro
+  if (!statement) {
+    return response.status(400).json({ error: "Statements not found." });
+  }
+
+  return response.json(statement);
+});
+
+app.put("/account", verifyIfExistsAccountCPF, (request, response) => {
+  const { name } = request.body;
+  const { customer } = request;
+
+  customer.name = name;
+  return response.status(201).send();
+});
+
+app.get("/account", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  return response.json(customer);
 });
 
 app.listen(3333);

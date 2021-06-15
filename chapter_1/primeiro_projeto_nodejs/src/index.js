@@ -24,6 +24,20 @@ function verifyIfExistsAccountCPF(request, response, next) {
   return next();
 }
 
+function getBalance(statement) {
+  // accumulator é a variavel responsavel por armazenar o valor que estamos adicionando ou removendo do objeto(operation)
+  const balance = statement.reduce((acc, operation) => {
+    if (operation.type === "credit") {
+      return acc + operation.amount;
+    } else {
+      return acc - operation.amount;
+    }
+    // inicia o reduce em zero
+  }, 0);
+
+  return balance;
+}
+
 /**
  * Dados de uma conta
  * cpf - string
@@ -72,6 +86,25 @@ app.post("/deposit", verifyIfExistsAccountCPF, (request, response) => {
     amount,
     created_at: new Date(),
     type: "credit",
+  };
+  customer.statement.push(statementOperation);
+
+  return response.status(201).send();
+});
+
+app.post("/withdraw", verifyIfExistsAccountCPF, (request, response) => {
+  const { amount } = request.body;
+
+  const { customer } = request;
+  const balance = getBalance(customer.statement);
+
+  if (balance < amount) {
+    return response.status(400).json({ error: "Insufficient funds!" });
+  }
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: "debit",
   };
   customer.statement.push(statementOperation);
 

@@ -149,4 +149,31 @@ app.get("/account", verifyIfExistsAccountCPF, (request, response) => {
   return response.json(customer);
 });
 
+app.delete("/account", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+
+  //deleting with splice
+  // remove o objeto igual ao customer dentro da array customers, removendo apenas UM dado
+  // customers.splice(customer, 1);
+
+  const customerIndex = customers.findIndex(
+    (cust) => cust.cpf === customer.cpf
+  );
+
+  // if desnecessario pois ja validamos se o customer existe no array com o middleware
+  // if (customerIndex === -1) {
+  //   return response.status(400).json({ error: "Customer Index not found!" });
+  // }
+
+  customers.splice(customerIndex, 1);
+
+  return response.status(200).json(customers);
+});
+
+app.get("/balance", verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  const balance = getBalance(customer.statement);
+  return response.json(balance);
+});
+
 app.listen(3333);

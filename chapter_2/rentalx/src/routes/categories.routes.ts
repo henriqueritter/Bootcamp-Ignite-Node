@@ -1,20 +1,19 @@
 import { Router, Request, Response } from "express";
-import { v4 as uuid } from "uuid";
+
+import { Category } from "../model/Category";
 
 const categoriesRoutes = Router();
 
-const categories = [];
+const categories: Category[] = [];
 
 // a rota é /categories porem ela esta vindo do path na chamada dentro do server.ts
 categoriesRoutes.post("/", (request: Request, response: Response) => {
   const { name, description } = request.body;
 
-  const category = {
-    id: uuid(),
-    name,
-    description,
-    created_at: new Date(),
-  };
+  const category = new Category();
+
+  Object.assign(category, { name, description, created_at: new Date() });
+
   categories.push(category);
 
   return response.status(201).json({ category });

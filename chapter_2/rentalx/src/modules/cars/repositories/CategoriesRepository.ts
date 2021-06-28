@@ -1,5 +1,4 @@
 import { Category } from "../model/Category";
-
 // Interface da classe para atender ao Liskov Substitution
 import {
   ICategoriesRepository,

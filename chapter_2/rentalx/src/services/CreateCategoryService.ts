@@ -12,6 +12,7 @@ interface IRequest {
  */
 
 class CreateCategoryService {
+  // constructor criado para aplicar o DIP do SOLID
   constructor(private categoriesRepository: CategoriesRepository) { }
   // mesma coisa que :
   // private categoriesRepository: CategoriesRepository;

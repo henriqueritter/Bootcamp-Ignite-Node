@@ -1,4 +1,5 @@
-import { CategoriesRepository } from "../repositories/CategoriesRepository";
+// importado Interface do tipo de repositorio
+import { ICategoriesRepository } from "../repositories/ICategoriesRepository";
 
 interface IRequest {
   name: string;
@@ -13,7 +14,7 @@ interface IRequest {
 
 class CreateCategoryService {
   // constructor criado para aplicar o DIP do SOLID
-  constructor(private categoriesRepository: CategoriesRepository) { }
+  constructor(private categoriesRepository: ICategoriesRepository) { }
   // mesma coisa que :
   // private categoriesRepository: CategoriesRepository;
   // constructor(categoriesRepository: CategoriesRepository){

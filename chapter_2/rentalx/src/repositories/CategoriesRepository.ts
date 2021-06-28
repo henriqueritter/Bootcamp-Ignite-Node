@@ -1,12 +1,13 @@
 import { Category } from "../model/Category";
 
-// DTO- Data Transfer Object
-interface ICreateCategoryDTO {
-  name: string;
-  description: string;
-}
+// Interface da classe para atender ao Liskov Substitution
+import {
+  ICategoriesRepository,
+  ICreateCategoryDTO,
+} from "./ICategoriesRepository";
 
-class CategoriesRepository {
+// Implementa a Interface do tipo da classe
+class CategoriesRepository implements ICategoriesRepository {
   // somente o repositorio terá acesso a "table" categories
   private categories: Category[];
 

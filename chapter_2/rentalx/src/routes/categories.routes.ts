@@ -4,6 +4,8 @@ import { CategoriesRepository } from "../repositories/CategoriesRepository";
 import { CreateCategoryService } from "../services/CreateCategoryService";
 
 const categoriesRoutes = Router();
+
+// instanciar repository de categories
 const categoriesRepository = new CategoriesRepository();
 
 // a rota é /categories porem ela esta vindo do path na chamada dentro do server.ts

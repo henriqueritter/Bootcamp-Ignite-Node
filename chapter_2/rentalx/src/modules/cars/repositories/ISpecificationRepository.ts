@@ -1,3 +1,0 @@
-interface ISpecificationRepository { }
-
-export { ISpecificationRepository };

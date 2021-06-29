@@ -1,0 +1,17 @@
+import { CategoriesRepository } from "../../repositories/CategoriesRepository";
+import { CreateCategoryController } from "./CreateCategoryController";
+import { CreateCategoryUseCase } from "./CreateCategoryUseCase";
+
+// instancia o repositorio
+const categoriesRepository = new CategoriesRepository();
+
+// instancia o useCase(service) passando o repositorio(injecao de dependencia)
+const createCategoryUseCase = new CreateCategoryUseCase(categoriesRepository);
+
+// instancia o controller injetando o service(useCase) instanciado
+const createCategoryController = new CreateCategoryController(
+  createCategoryUseCase
+);
+
+// exporta o controller
+export { createCategoryController };

@@ -1,5 +1,5 @@
 // importado Interface do tipo de repositorio
-import { ICategoriesRepository } from "../repositories/ICategoriesRepository";
+import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
 interface IRequest {
   name: string;
@@ -12,7 +12,7 @@ interface IRequest {
  * [x] - Acessar o repositorio
  */
 
-class CreateCategoryService {
+class CreateCategoryUseCase {
   // constructor criado para aplicar o DIP do SOLID
   constructor(private categoriesRepository: ICategoriesRepository) {
     //
@@ -25,6 +25,7 @@ class CreateCategoryService {
 
   execute({ name, description }: IRequest): void {
     const categoryAlreadyExists = this.categoriesRepository.findByName(name);
+
     if (categoryAlreadyExists) {
       throw new Error("Category already exists.");
     }
@@ -33,4 +34,4 @@ class CreateCategoryService {
   }
 }
 
-export { CreateCategoryService };
+export { CreateCategoryUseCase };

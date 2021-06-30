@@ -10,9 +10,19 @@ class CategoriesRepository implements ICategoriesRepository {
   // somente o repositorio terá acesso a "table" categories
   private categories: Category[];
 
-  constructor() {
+  private static INSTANCE: CategoriesRepository;
+
+  // proibe de instanciar essa classe de fora
+  private constructor() {
     // inicializa a "table" como array vazio
     this.categories = [];
+  }
+
+  public static getInstance(): CategoriesRepository {
+    if (!CategoriesRepository.INSTANCE) {
+      CategoriesRepository.INSTANCE = new CategoriesRepository();
+    }
+    return CategoriesRepository.INSTANCE;
   }
 
   // Recebe description e name com base no DTO criado, e retorna nada(void)

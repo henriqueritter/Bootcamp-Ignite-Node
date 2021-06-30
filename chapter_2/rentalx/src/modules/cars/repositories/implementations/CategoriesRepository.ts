@@ -1,9 +1,9 @@
-import { Category } from "../model/Category";
+import { Category } from "../../model/Category";
 // Interface da classe para atender ao Liskov Substitution
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
-} from "./ICategoriesRepository";
+} from "../ICategoriesRepository";
 
 // Implementa a Interface do tipo da classe
 class CategoriesRepository implements ICategoriesRepository {

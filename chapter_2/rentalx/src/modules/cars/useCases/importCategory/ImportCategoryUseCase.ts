@@ -31,6 +31,7 @@ class ImportCategoryUseCase {
           });
         })
         .on("end", () => {
+          fs.promises.unlink(file.path); // remove o arquivo da pasta tmp após terminar a leitura
           resolve(categories);
         })
         .on("error", (err) => {

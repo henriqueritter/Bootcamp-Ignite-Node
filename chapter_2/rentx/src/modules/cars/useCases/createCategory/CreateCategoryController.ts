@@ -7,11 +7,11 @@ class CreateCategoryController {
   constructor(private createCategoryUseCase: CreateCategoryUseCase) { }
 
   // retorna um Response
-  handle(request: Request, response: Response): Response {
+  async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
     // chama o metodo execute do useCase(service) instanciado no construtor
-    this.createCategoryUseCase.execute({ name, description });
+    await this.createCategoryUseCase.execute({ name, description });
 
     return response.status(201).send();
   }

@@ -1,4 +1,6 @@
-import { Category } from "../../model/Category";
+import { getRepository, Repository } from "typeorm";
+
+import { Category } from "../../entities/Category";
 // Interface da classe para atender ao Liskov Substitution
 import {
   ICategoriesRepository,
@@ -7,41 +9,34 @@ import {
 
 // Implementa a Interface do tipo da classe
 class CategoriesRepository implements ICategoriesRepository {
-  // somente o repositorio terá acesso a "table" categories
-  private categories: Category[];
-
-  private static INSTANCE: CategoriesRepository;
+  // private vai dizer que o acesso a esse repository(contendo os metodos do Repository) e seus metodos serão restritos a classe
+  private repository: Repository<Category>;
 
   // proibe de instanciar essa classe de fora
-  private constructor() {
-    // inicializa a "table" como array vazio
-    this.categories = [];
-  }
-
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository();
-    }
-    return CategoriesRepository.INSTANCE;
+  constructor() {
+    // vai criar o repository com os atributos do Repository só que mais restrito
+    this.repository = getRepository(Category);
   }
 
   // Recebe description e name com base no DTO criado, e retorna nada(void)
-  create({ description, name }: ICreateCategoryDTO): void {
-    const category = new Category();
+  async create({ description, name }: ICreateCategoryDTO): Promise<void> {
+    const category = this.repository.create({
+      description,
+      name,
+    });
 
-    Object.assign(category, { name, description, created_at: new Date() });
-
-    this.categories.push(category);
+    await this.repository.save(category);
   }
 
   // metodo list, tem como retorno um array do tipo Category
-  list(): Category[] {
-    return this.categories;
+  async list(): Promise<Category[]> {
+    const categories = await this.repository.find();
+    return categories;
   }
   // func que valida se existe categoria com o nome a ser criado
   // Funcao que recebe um name e retorna um objeto do tipo Category
-  findByName(name: string): Category {
-    const category = this.categories.find((category) => category.name === name);
+  async findByName(name: string): Promise<Category> {
+    const category = await this.repository.findOne({ name }); // select * from categories Where name = 'name' limit 1
     return category;
   }
 }

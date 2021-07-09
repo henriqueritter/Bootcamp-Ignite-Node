@@ -21,5 +21,4 @@ class Category {
     }
   }
 }
-
 export { Category };

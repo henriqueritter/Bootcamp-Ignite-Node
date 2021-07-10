@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import multer from "multer";
 
 import { CreateCategoryController } from "../modules/cars/useCases/createCategory/CreateCategoryController";
-import { importCategoryController } from "../modules/cars/useCases/importCategory";
+import { ImportCategoryController } from "../modules/cars/useCases/importCategory/ImportCategoryController";
 
 // import com multer
 import { listCategoriesController } from "../modules/cars/useCases/listCategories";
@@ -14,6 +14,7 @@ const upload = multer({
 });
 
 const createCategoryController = new CreateCategoryController();
+const importCategoryController = new ImportCategoryController();
 
 // a rota é /categories porem ela esta vindo do path na chamada dentro do server.ts
 // createCategoryController.handle é passado como se fosse um middleware pois ele recebe o request,response
@@ -26,9 +27,7 @@ categoriesRoutes.get("/", (request: Request, response: Response) => {
 categoriesRoutes.post(
   "/import",
   upload.single("file"),
-  (request: Request, response: Response) => {
-    return importCategoryController.handle(request, response);
-  }
+  importCategoryController.handle
 );
 
 export { categoriesRoutes };

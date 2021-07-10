@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
+// para injecao de depen
+import { container } from "tsyringe";
 
 import { CreateCategoryUseCase } from "./CreateCategoryUseCase";
 
 class CreateCategoryController {
-  // importa/instancia useCase de Category
-  constructor(private createCategoryUseCase: CreateCategoryUseCase) { }
-
   // retorna um Response
   async handle(request: Request, response: Response): Promise<Response> {
     const { name, description } = request.body;
 
-    // chama o metodo execute do useCase(service) instanciado no construtor
-    await this.createCategoryUseCase.execute({ name, description });
+    // tsyringe vai fazer a injecao de dependencia automatica do useCase
+    const createCategoryUseCase = container.resolve(CreateCategoryUseCase);
+
+    // chama o metodo execute do useCase(service) injetado acima
+    await createCategoryUseCase.execute({ name, description });
 
     return response.status(201).send();
   }

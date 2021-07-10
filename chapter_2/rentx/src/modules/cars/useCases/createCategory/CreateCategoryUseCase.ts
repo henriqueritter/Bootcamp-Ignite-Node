@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 // importado Interface do tipo de repositorio
 import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
 
@@ -6,16 +8,13 @@ interface IRequest {
   description: string;
 }
 
-/**
- * [x] - Definir tipo de retorno
- * [x] - Alterar o retorno de erro
- * [x] - Acessar o repositorio
- */
-
+@injectable()
 class CreateCategoryUseCase {
   // constructor criado para aplicar o DIP do SOLID
-
-  constructor(private categoriesRepository: ICategoriesRepository) { }
+  constructor(
+    @inject("CategoriesRepository") // nome do container criado no src/shared/container
+    private categoriesRepository: ICategoriesRepository
+  ) { }
   // mesma coisa que :
   // private categoriesRepository: CategoriesRepository;
   // constructor(categoriesRepository: CategoriesRepository){

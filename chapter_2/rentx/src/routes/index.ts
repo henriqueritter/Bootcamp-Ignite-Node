@@ -11,5 +11,6 @@ router.use("/categories", categoriesRoutes);
 router.use("/specifications", specificationsRoutes);
 
 router.use("/users", usersRoutes);
-router.use("/users/", authenticateRoutes);
+
+router.use(authenticateRoutes); // a rota será localhost:3333/sessions
 export { router };

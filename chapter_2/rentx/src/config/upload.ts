@@ -1,9 +1,20 @@
+import crypto from "crypto";
 import multer from "multer";
 import { resolve } from "path";
 
 export default {
   // funcao export recebe o caminho
-  export(folder: string) {
-    //
+  upload(folder: string) {
+    return {
+      storage: multer.diskStorage({
+        destination: resolve(__dirname, "..", "..", folder),
+        filename: (request, file, callback) => {
+          const fileHash = crypto.randomBytes(16).toString("hex"); // cria o hash para o nome do arquivo
+          const fileName = `${fileHash}-${file.originalname}`; // concatena o nome original do arquivo com o hash criado
+
+          return callback(null, fileName);
+        },
+      }),
+    };
   },
 };

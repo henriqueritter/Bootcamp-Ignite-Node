@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 
 import uploadConfig from "../config/upload"; // arquivo de configuracao do multer
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
 import { CreateUserController } from "../modules/accounts/useCases/createUser/CreateUserController";
 import { UpdateUserAvatarController } from "../modules/accounts/useCases/updateUserAvatar/UpdateUserAvatarController";
 
@@ -17,6 +18,7 @@ usersRoutes.post("/", createUserController.handle);
 // update avatar
 usersRoutes.patch(
   "/avatar",
+  ensureAuthenticated,
   uploadAvatar.single("avatar"), // middleware usando a configuracao de upload
   updateUserAvatarController.handle
 );

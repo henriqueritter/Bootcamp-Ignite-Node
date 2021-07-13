@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { query } from "express";
 import { MigrationInterface, QueryRunner, TableColumn } from "typeorm";
 

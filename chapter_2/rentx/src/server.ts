@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import "./database";
 import "./shared/container"; // para injecao de depencia com o tsyringe
 
+// appError class criada para tratar os erros com message e statusCode
 import { AppError } from "./errors/AppError";
 import { router } from "./routes";
 import swaggerFile from "./swagger.json";

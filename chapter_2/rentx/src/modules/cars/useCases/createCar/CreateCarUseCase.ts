@@ -1,4 +1,6 @@
-import { injectable } from "tsyringe";
+import { injectable, inject } from "tsyringe";
+
+import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 
 interface IRequest {
   name: string;
@@ -12,6 +14,11 @@ interface IRequest {
 
 @injectable()
 class CreateCarUseCase {
+  constructor(
+    @inject("CarsRepository")
+    private carsRepository: ICarsRepository
+  ) { }
+
   async execute({
     name,
     description,

@@ -1,0 +1,2 @@
+interface ICarsRepository { }
+export { ICarsRepository };

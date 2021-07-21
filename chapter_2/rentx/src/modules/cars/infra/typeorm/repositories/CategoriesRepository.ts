@@ -1,11 +1,12 @@
 import { getRepository, Repository } from "typeorm";
 
-import { Category } from "../../entities/Category";
-// Interface da classe para atender ao Liskov Substitution
 import {
   ICategoriesRepository,
   ICreateCategoryDTO,
-} from "../ICategoriesRepository";
+} from "@modules/cars/repositories/ICategoriesRepository";
+
+import { Category } from "../entities/Category";
+// Interface da classe para atender ao Liskov Substitution
 
 // Implementa a Interface do tipo da classe
 class CategoriesRepository implements ICategoriesRepository {

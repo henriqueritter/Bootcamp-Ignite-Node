@@ -41,5 +41,4 @@ class CategoriesRepository implements ICategoriesRepository {
     return category;
   }
 }
-
 export { CategoriesRepository };

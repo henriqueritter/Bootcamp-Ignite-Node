@@ -4,7 +4,6 @@ Os requisitos funcionais e as regras de negocio trabalham juntos
 # Cadastro de carro
 **Requisitos Funcionais** 
 Deve ser possível cadastrar um novo carro.
-Deve ser possível listar todas as categorias.
 
 **Requisitos Não Funcionais**
 N/A

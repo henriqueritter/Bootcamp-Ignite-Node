@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors"; // para tratar os erros
 import swaggerUi from "swagger-ui-express";
 
-import "./database";
+import "@shared/infra/typeorm";
 import "@shared/container"; // para injecao de depencia com o tsyringe
 
 // appError class criada para tratar os erros com message e statusCode

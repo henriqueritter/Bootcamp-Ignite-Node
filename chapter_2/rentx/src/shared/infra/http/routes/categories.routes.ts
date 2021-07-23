@@ -7,6 +7,9 @@ import { ImportCategoryController } from "@modules/cars/useCases/importCategory/
 // import com multer
 import { ListCategoriesController } from "@modules/cars/useCases/listCategories/ListCategoriesController";
 
+import { ensureAdmin } from "../middlewares/ensureAdmin";
+import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
+
 const categoriesRoutes = Router();
 
 const upload = multer({
@@ -19,12 +22,19 @@ const listCategoriesController = new ListCategoriesController();
 
 // a rota é /categories porem ela esta vindo do path na chamada dentro do server.ts
 // createCategoryController.handle é passado como se fosse um middleware pois ele recebe o request,response
-categoriesRoutes.post("/", createCategoryController.handle);
+categoriesRoutes.post(
+  "/",
+  ensureAuthenticated,
+  ensureAdmin,
+  createCategoryController.handle
+);
 
 categoriesRoutes.get("/", listCategoriesController.handle);
 
 categoriesRoutes.post(
   "/import",
+  ensureAuthenticated,
+  ensureAdmin,
   upload.single("file"),
   importCategoryController.handle
 );

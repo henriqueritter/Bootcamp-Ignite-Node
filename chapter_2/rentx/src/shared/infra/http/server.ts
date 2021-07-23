@@ -2,15 +2,15 @@ import express, { Request, Response, NextFunction } from "express";
 import "express-async-errors"; // para tratar os erros
 import swaggerUi from "swagger-ui-express";
 
-import "@shared/infra/typeorm";
 import "@shared/container"; // para injecao de depencia com o tsyringe
-
 // appError class criada para tratar os erros com message e statusCode
 import { AppError } from "@shared/errors/AppError";
+import createConnection from "@shared/infra/typeorm";
 
 import swaggerFile from "../../../swagger.json";
 import { router } from "./routes";
 
+createConnection(); // cria a conexao com o banco de dados
 const app = express();
 
 app.use(express.json());

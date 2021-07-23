@@ -3,12 +3,11 @@ import multer from "multer";
 
 import { CreateCategoryController } from "@modules/cars/useCases/createCategory/CreateCategoryController";
 import { ImportCategoryController } from "@modules/cars/useCases/importCategory/ImportCategoryController";
-
 // import com multer
 import { ListCategoriesController } from "@modules/cars/useCases/listCategories/ListCategoriesController";
-
-import { ensureAdmin } from "../middlewares/ensureAdmin";
-import { ensureAuthenticated } from "../middlewares/ensureAuthenticated";
+// middlewares
+import { ensureAdmin } from "@shared/infra/http/middlewares/ensureAdmin";
+import { ensureAuthenticated } from "@shared/infra/http/middlewares/ensureAuthenticated";
 
 const categoriesRoutes = Router();
 

@@ -25,7 +25,7 @@ class Car {
   daily_rate: number;
 
   @Column()
-  available = true; // atribui valor default como true e coloca a tipagem de boolean nessa propriedade
+  available: boolean; // atribui valor default como true e coloca a tipagem de boolean nessa propriedade
 
   @Column()
   license_plate: string;
@@ -48,6 +48,7 @@ class Car {
   constructor() {
     if (!this.id) {
       this.id = uuid();
+      this.available = true;
     }
   }
 }

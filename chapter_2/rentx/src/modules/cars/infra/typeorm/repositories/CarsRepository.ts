@@ -49,6 +49,7 @@ class CarsRepository implements ICarsRepository {
       .createQueryBuilder("c") // alias C (pode ser qualquer um)
       .where("available=:available", { available: true }); // where com parametro
 
+    // add wheres para cada atributo passado
     if (brand) {
       carsQuery.andWhere("c.brand=:brand", { brand });
     }

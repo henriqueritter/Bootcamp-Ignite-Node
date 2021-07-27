@@ -1,14 +1,16 @@
 import { CarsRepositoryInMemory } from "@modules/cars/repositories/in-memory/CarsRepositoryInMemory";
 
-import { ListCarsUseCase } from "./ListCarsUseCase";
+import { ListAvailableCarsUseCase } from "./ListAvailableCarsUseCase";
 
-let listCarsUseCase: ListCarsUseCase;
+let listAvailableCarsUseCase: ListAvailableCarsUseCase;
 let carsRepositoryInMemory: CarsRepositoryInMemory;
 
 describe("List Cars", () => {
   beforeEach(() => {
     carsRepositoryInMemory = new CarsRepositoryInMemory();
-    listCarsUseCase = new ListCarsUseCase(carsRepositoryInMemory);
+    listAvailableCarsUseCase = new ListAvailableCarsUseCase(
+      carsRepositoryInMemory
+    );
   });
   it("should be able to list all available cars", async () => {
     const car = await carsRepositoryInMemory.create({
@@ -21,7 +23,7 @@ describe("List Cars", () => {
       category_id: "category_id",
     });
 
-    const cars = await listCarsUseCase.execute({});
+    const cars = await listAvailableCarsUseCase.execute({});
 
     expect(cars).toEqual([car]); // verifica se retornou um array com o carro criado
   });
@@ -37,7 +39,7 @@ describe("List Cars", () => {
       category_id: "category_id",
     });
 
-    const cars = await listCarsUseCase.execute({
+    const cars = await listAvailableCarsUseCase.execute({
       brand: "Car_brand_test",
     });
 
@@ -55,8 +57,26 @@ describe("List Cars", () => {
       category_id: "category_id",
     });
 
-    const cars = await listCarsUseCase.execute({
-      brand: "Car3",
+    const cars = await listAvailableCarsUseCase.execute({
+      name: "Car3",
+    });
+
+    expect(cars).toEqual([car]);
+  });
+
+  it("should be able to list all available cars by category", async () => {
+    const car = await carsRepositoryInMemory.create({
+      name: "Car4",
+      description: "Car description",
+      daily_rate: 100.0,
+      license_plate: "ABC-4567",
+      fine_amount: 50,
+      brand: "Car_brand_test",
+      category_id: "1234",
+    });
+
+    const cars = await listAvailableCarsUseCase.execute({
+      category_id: "1234",
     });
 
     expect(cars).toEqual([car]);

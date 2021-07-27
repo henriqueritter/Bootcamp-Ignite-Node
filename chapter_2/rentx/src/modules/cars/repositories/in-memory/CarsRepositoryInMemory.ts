@@ -52,13 +52,14 @@ class CarsRepositoryInMemory implements ICarsRepository {
       return null;
     });
 
-    // filtra se os carros estao disponiveis
-    // .filter(
-    //   (car) =>
-    //     (brand && car.brand === brand) || // verifica se brand preenchido, se estiver preenchido entao procura por ele
-    //     (category_id && car.category_id === category_id) ||
-    //     (name && car.name === name) // mesma coisa, verifica se o name foi passado, se sim entao procura por ele
-    // );
+    // const all = this.cars
+    //   .filter((car) => car.available === true)
+    //   .filter(
+    //     (car) =>
+    //       (brand && car.brand === brand) || // verifica se brand preenchido, se estiver preenchido entao procura por ele
+    //       (category_id && car.category_id === category_id) ||
+    //       (name && car.name === name) // mesma coisa, verifica se o name foi passado, se sim entao procura por ele
+    //   );
 
     return all;
   }

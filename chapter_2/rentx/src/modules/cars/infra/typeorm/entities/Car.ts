@@ -5,10 +5,13 @@ import {
   CreateDateColumn,
   JoinColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { v4 as uuid } from "uuid";
 
 import { Category } from "./Category";
+import { Specification } from "./Specification";
 
 @Entity("cars")
 class Car {
@@ -42,6 +45,14 @@ class Car {
 
   @Column()
   category_id: string;
+
+  @ManyToMany(() => Specification)
+  @JoinTable({
+    name: "specifications_cars",
+    joinColumns: [{ name: "car_id" }], // referencia a table da entidade atual(entidade cars)
+    inverseJoinColumns: [{ name: "specification_id" }], // é a outra coluna da outra table que estamos colocando no many2many
+  })
+  specifications: Specification[];
 
   @CreateDateColumn()
   created_at: Date;

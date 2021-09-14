@@ -5,7 +5,7 @@ import {
   ISpecificationsRepository,
 } from "../ISpecificationsRepository";
 
-class SpecificationInMemory implements ISpecificationsRepository {
+class SpecificationsRepositoryInMemory implements ISpecificationsRepository {
   specifications: Specification[] = [];
 
   async create({ description, name }: ICreateSpecificationsDTO): Promise<void> {
@@ -34,4 +34,4 @@ class SpecificationInMemory implements ISpecificationsRepository {
   }
 }
 
-export { SpecificationInMemory };
+export { SpecificationsRepositoryInMemory };

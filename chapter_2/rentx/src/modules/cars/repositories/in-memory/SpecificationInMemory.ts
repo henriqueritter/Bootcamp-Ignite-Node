@@ -8,14 +8,29 @@ import {
 class SpecificationInMemory implements ISpecificationsRepository {
   specifications: Specification[] = [];
 
-  create({ description, name }: ICreateSpecificationsDTO): Promise<void> {
-    throw new Error("Method not implemented.");
+  async create({ description, name }: ICreateSpecificationsDTO): Promise<void> {
+    const specification = new Specification();
+
+    Object.assign(Specification, {
+      description,
+      name,
+    });
+    this.specifications.push(specification);
   }
-  findByName(name: string): Promise<any> {
-    throw new Error("Method not implemented.");
+
+  async findByName(name: string): Promise<Specification> {
+    const specification = this.specifications.find(
+      (specification) => specification.name === name
+    );
+    return specification;
   }
-  findByIds(ids: string[]): Promise<any[]> {
-    throw new Error("Method not implemented.");
+
+  async findByIds(ids: string[]): Promise<Specification[]> {
+    const allSpecifications = this.specifications.filter((specification) =>
+      ids.includes(specification.id)
+    );
+
+    return allSpecifications;
   }
 }
 

@@ -45,7 +45,8 @@ describe("Create Car Specification", () => {
       description: "test",
       name: "test",
     });
-    const specifications_id = ["8989", "9090"];
+    const specifications_id = [specification.id];
+
     await createCarSpecificationUseCase.execute({
       car_id: car.id,
       specifications_id,

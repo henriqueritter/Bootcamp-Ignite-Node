@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
-import { ICarsImageRepository } from "@modules/cars/repositories/ICarsImagesRepository";
+import { ICarsImagesRepository } from "@modules/cars/repositories/ICarsImagesRepository";
 
 interface IRequest {
   car_id: string;
@@ -11,7 +11,7 @@ interface IRequest {
 class UploadCarImagesUseCase {
   constructor(
     @inject("CarsImagesRepository")
-    private carsImagesRepository: ICarsImageRepository
+    private carsImagesRepository: ICarsImagesRepository
   ) { }
   // recebe array de paths das images
   async execute({ car_id, images_name }: IRequest): Promise<void> {

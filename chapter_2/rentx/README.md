@@ -43,7 +43,6 @@ O usuário responsável pelo cadastro deve ser um usuário administrador.
 # Cadastro de imagens carro
 **Requisitos Funcionais** 
 Deve ser possível cadastrar a imagem para o carro.
-Deve ser possível listar todos os carros.
 
 **Requisitos Não Funcionais**
 Utilizar o multer para upload dos arquivos.
@@ -64,3 +63,7 @@ N/A
 O Aluguel deve ter duração mínima de 24 horas.
 Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo usuário.
 Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo carro.
+
+# TODO
+**Upload de Images**
+Funcionalidade de deletar/alterar imagem do carro.

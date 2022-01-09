@@ -29,6 +29,7 @@ class CreateRentalUseCase {
     const rentalOpenToUser = await this.rentalsRepository.findOpenRentalByUser(
       user_id
     );
+
     if (rentalOpenToUser) {
       throw new AppError("There is already a rental in progress for user.");
     }

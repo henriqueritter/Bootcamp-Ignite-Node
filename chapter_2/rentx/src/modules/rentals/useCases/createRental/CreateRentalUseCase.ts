@@ -1,3 +1,4 @@
+import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
@@ -8,6 +9,7 @@ interface IRequest {
 
 class CreateRentalUseCase {
   constructor(private rentalsRepository: IRentalsRepository) { }
+
   async execute({
     car_id,
     user_id,

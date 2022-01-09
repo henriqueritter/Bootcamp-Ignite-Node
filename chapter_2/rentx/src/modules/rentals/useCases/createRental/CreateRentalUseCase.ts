@@ -1,3 +1,4 @@
+import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
 
@@ -14,7 +15,7 @@ class CreateRentalUseCase {
     car_id,
     user_id,
     expected_return_date,
-  }: IRequest): Promise<void> {
+  }: IRequest): Promise<Rental> {
     // Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo usuário.
     const carUnavailable = await this.rentalsRepository.findOpenRentalByCar(
       car_id
@@ -32,6 +33,13 @@ class CreateRentalUseCase {
       throw new AppError("There is already a rental in progress for user.");
     }
     // O Aluguel deve ter duração mínima de 24 horas.
+    const rental = await this.rentalsRepository.create({
+      user_id,
+      car_id,
+      expected_return_date,
+    });
+
+    return rental;
   }
 }
 

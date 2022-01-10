@@ -1,8 +1,11 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 
 import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
+
+dayjs.extend(utc);
 
 interface IRequest {
   user_id: string;
@@ -36,8 +39,17 @@ class CreateRentalUseCase {
       throw new AppError("There is already a rental in progress for user.");
     }
 
-    const compare = dayjs();
+    // converte nossa data para padrao UTC
+    const expectedReturnDateFormat = dayjs(expected_return_date)
+      .utc()
+      .local()
+      .format();
 
+    const dateNow = dayjs().utc().local().format();
+
+    const compare = dayjs(expected_return_date).diff(dateNow, "hours");
+
+    console.log(compare);
     // O Aluguel deve ter duração mínima de 24 horas.
     const rental = await this.rentalsRepository.create({
       user_id,

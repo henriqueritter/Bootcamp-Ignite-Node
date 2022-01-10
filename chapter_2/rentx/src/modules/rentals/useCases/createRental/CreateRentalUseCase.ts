@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
@@ -33,6 +35,9 @@ class CreateRentalUseCase {
     if (rentalOpenToUser) {
       throw new AppError("There is already a rental in progress for user.");
     }
+
+    const compare = dayjs();
+
     // O Aluguel deve ter duração mínima de 24 horas.
     const rental = await this.rentalsRepository.create({
       user_id,

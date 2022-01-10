@@ -27,7 +27,7 @@ describe("Create Rental", () => {
     expect(rental).toHaveProperty("start_date");
   });
 
-  it("should not be able to creante a new rental if there is another open rent to the same user", async () => {
+  it("should not be able to create a new rental if there is another open rent to the same user", async () => {
     expect(async () => {
       // alguel duplicado para test
       await createRentalUseCase.execute({
@@ -44,7 +44,7 @@ describe("Create Rental", () => {
     }).rejects.toBeInstanceOf(AppError);
   });
 
-  it("should not be able to creante a new rental if there is another open rent to the same car", async () => {
+  it("should not be able to create a new rental if there is another open rent to the same car", async () => {
     expect(async () => {
       // alguel duplicado para test
       await createRentalUseCase.execute({
@@ -57,6 +57,17 @@ describe("Create Rental", () => {
         user_id: "321",
         car_id: "test",
         expected_return_date: dayAdd24Hours,
+      });
+    }).rejects.toBeInstanceOf(AppError);
+  });
+
+  it("should not be able to create a new rental with invalid return time", async () => {
+    expect(async () => {
+      // alguel duplicado para test
+      await createRentalUseCase.execute({
+        user_id: "123",
+        car_id: "test",
+        expected_return_date: dayjs().toDate(),
       });
     }).rejects.toBeInstanceOf(AppError);
   });

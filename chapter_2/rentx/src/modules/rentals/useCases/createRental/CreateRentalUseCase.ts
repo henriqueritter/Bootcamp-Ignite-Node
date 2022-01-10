@@ -21,6 +21,7 @@ class CreateRentalUseCase {
     user_id,
     expected_return_date,
   }: IRequest): Promise<Rental> {
+    const minimumRentHour = 24;
     // Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo usuário.
     const carUnavailable = await this.rentalsRepository.findOpenRentalByCar(
       car_id
@@ -45,11 +46,17 @@ class CreateRentalUseCase {
       .local()
       .format();
 
+    // converte data atual
     const dateNow = dayjs().utc().local().format();
 
+    // retorna diferenca de horas
     const compare = dayjs(expected_return_date).diff(dateNow, "hours");
 
-    console.log(compare);
+    // se o tempo de alguel for menor que 24h estoura um erro
+    if (compare < minimumRentHour) {
+      throw new AppError("Invalid return time.");
+    }
+
     // O Aluguel deve ter duração mínima de 24 horas.
     const rental = await this.rentalsRepository.create({
       user_id,

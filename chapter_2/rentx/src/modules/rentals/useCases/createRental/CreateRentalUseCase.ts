@@ -1,5 +1,6 @@
 import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
@@ -9,13 +10,17 @@ interface IRequest {
 }
 
 class CreateRentalUseCase {
-  constructor(private rentalsRepository: IRentalsRepository) { }
+  constructor(
+    private rentalsRepository: IRentalsRepository,
+    private dateProvider: IDateProvider
+  ) { }
 
   async execute({
     car_id,
     user_id,
     expected_return_date,
   }: IRequest): Promise<Rental> {
+    const minimumRentHour = 24;
     // Não deve ser possível cadastrar um novo aluguel caso já exista um aberto para o mesmo usuário.
     const carUnavailable = await this.rentalsRepository.findOpenRentalByCar(
       car_id
@@ -33,6 +38,21 @@ class CreateRentalUseCase {
     if (rentalOpenToUser) {
       throw new AppError("There is already a rental in progress for user.");
     }
+
+    // pega data atual
+    const dateNow = this.dateProvider.dateNow();
+
+    // retorna diferenca de horas
+    const compare = this.dateProvider.compareInHours({
+      start_date: dateNow,
+      end_date: expected_return_date,
+    });
+
+    // se o tempo de alguel for menor que 24h estoura um erro
+    if (compare < minimumRentHour) {
+      throw new AppError("Invalid return time.");
+    }
+
     // O Aluguel deve ter duração mínima de 24 horas.
     const rental = await this.rentalsRepository.create({
       user_id,

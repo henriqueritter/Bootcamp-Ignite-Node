@@ -1,9 +1,7 @@
-
 import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
-
-
 
 interface IRequest {
   user_id: string;
@@ -12,7 +10,10 @@ interface IRequest {
 }
 
 class CreateRentalUseCase {
-  constructor(private rentalsRepository: IRentalsRepository) { }
+  constructor(
+    private rentalsRepository: IRentalsRepository,
+    private dateProvider: IDateProvider
+  ) { }
 
   async execute({
     car_id,
@@ -39,13 +40,16 @@ class CreateRentalUseCase {
     }
 
     // converte nossa data para padrao UTC
-    const expectedReturnDateFormat =
+    // const expectedReturnDateFormat = this.dateProvider.convertToUTC(expected_return_date);
 
     // converte data atual
-    const dateNow = dayjs().utc().local().format();
+    const dateNow = this.dateProvider.dateNow();
 
     // retorna diferenca de horas
-    const compare =
+    const compare = this.dateProvider.compareInHours(
+      expected_return_date,
+      dateNow
+    );
 
     // se o tempo de alguel for menor que 24h estoura um erro
     if (compare < minimumRentHour) {

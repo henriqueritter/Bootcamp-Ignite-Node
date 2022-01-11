@@ -39,17 +39,14 @@ class CreateRentalUseCase {
       throw new AppError("There is already a rental in progress for user.");
     }
 
-    // converte nossa data para padrao UTC
-    // const expectedReturnDateFormat = this.dateProvider.convertToUTC(expected_return_date);
-
-    // converte data atual
+    // pega data atual
     const dateNow = this.dateProvider.dateNow();
 
     // retorna diferenca de horas
-    const compare = this.dateProvider.compareInHours(
-      expected_return_date,
-      dateNow
-    );
+    const compare = this.dateProvider.compareInHours({
+      start_date: dateNow,
+      end_date: expected_return_date,
+    });
 
     // se o tempo de alguel for menor que 24h estoura um erro
     if (compare < minimumRentHour) {

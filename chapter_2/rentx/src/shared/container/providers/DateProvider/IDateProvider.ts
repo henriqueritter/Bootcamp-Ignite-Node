@@ -1,5 +1,7 @@
+import { ICompareInHoursParams } from "./dtos/ICompareInHoursParams";
+
 interface IDateProvider {
-  compareInHours(start_date: Date, end_date: Date): number;
+  compareInHours(data: ICompareInHoursParams): number;
 
   convertToUTC(date: Date): string;
 

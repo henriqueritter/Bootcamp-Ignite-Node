@@ -1,11 +1,9 @@
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 
 import { Rental } from "@modules/rentals/infra/typeorm/entities/Rental";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 import { AppError } from "@shared/errors/AppError";
 
-dayjs.extend(utc);
+
 
 interface IRequest {
   user_id: string;
@@ -41,16 +39,13 @@ class CreateRentalUseCase {
     }
 
     // converte nossa data para padrao UTC
-    const expectedReturnDateFormat = dayjs(expected_return_date)
-      .utc()
-      .local()
-      .format();
+    const expectedReturnDateFormat =
 
     // converte data atual
     const dateNow = dayjs().utc().local().format();
 
     // retorna diferenca de horas
-    const compare = dayjs(expected_return_date).diff(dateNow, "hours");
+    const compare =
 
     // se o tempo de alguel for menor que 24h estoura um erro
     if (compare < minimumRentHour) {

@@ -13,6 +13,9 @@ import { ISpecificationsRepository } from "@modules/cars/repositories/ISpecifica
 import { RentalsRepository } from "@modules/rentals/infra/typeorm/repositories/RentalsRepository";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
 
+// import dos providers
+import "@shared/container/providers";
+
 container.registerSingleton<ICarsRepository>("CarsRepository", CarsRepository);
 // o Singleton recebera o ICategoryRepository
 container.registerSingleton<ICategoriesRepository>( // toda implementacao ICategory com injecao para o nome abaixo, entao instancia a classe CategoriesRepository

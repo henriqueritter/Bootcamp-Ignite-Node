@@ -3,5 +3,5 @@ import request from "supertest";
 import { app } from "@shared/infra/http/app";
 
 describe("Create Category Controller", async () => {
-  await request(app).get("/").expect(200);
+  await request(app).get("/cars/available").expect(200);
 });

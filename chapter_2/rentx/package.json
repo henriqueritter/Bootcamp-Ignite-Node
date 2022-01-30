@@ -22,7 +22,8 @@
     "swagger-ui-express": "^4.1.6",
     "tsyringe": "^4.6.0",
     "typeorm": "^0.2.34",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "supertest": "^6.2.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -44,7 +45,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.0.6",
     "prettier": "^2.3.1",
-    "supertest": "^6.2.2",
     "ts-jest": "^27.0.3",
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.10.1",

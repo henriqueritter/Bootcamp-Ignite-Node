@@ -34,11 +34,18 @@ describe("Create Category Controller", () => {
       email: "admin@rentx.com",
       password: "admin",
     });
-    console.log(responseToken.body);
-    const response = await request(app).post("/categories").send({
-      name: "Category Supertest",
-      description: "Category Supertest",
-    });
+
+    const { token } = responseToken.body;
+
+    const response = await request(app)
+      .post("/categories")
+      .send({
+        name: "Category Supertest",
+        description: "Category Supertest",
+      })
+      .set({
+        Authorization: `Bearer: ${token}`,
+      });
 
     expect(response.status).toBe(201);
   });

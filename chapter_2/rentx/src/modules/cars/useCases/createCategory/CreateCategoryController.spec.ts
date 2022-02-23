@@ -7,13 +7,15 @@ import { app } from "@shared/infra/http/app";
 import createConnection from "@shared/infra/typeorm";
 
 let connection: Connection;
-describe("Create Category Controller", async () => {
-  beforeEach(async () => {
-    connection = await createConnection();
 
+describe("Create Category Controller", () => {
+  beforeAll(async () => {
+    connection = await createConnection(); // cria connection
+    await connection.runMigrations(); // executa as migrations
+
+    // cria um usuario admin no DB
     const id = uuid();
     const password = await hash("admin", 8);
-    // const date = new Date();
 
     await connection.query(
       `INSERT INTO USERS(id, name, email, password, "isAdmin", created_at, driver_license)
@@ -22,7 +24,17 @@ describe("Create Category Controller", async () => {
     );
   });
 
+  afterAll(async () => {
+    await connection.dropDatabase();
+    await connection.close();
+  });
+
   it("should be albe to create a new category", async () => {
+    const responseToken = await request(app).post("/sessions").send({
+      email: "admin@rentx.com",
+      password: "admin",
+    });
+    console.log(responseToken.body);
     const response = await request(app).post("/categories").send({
       name: "Category Supertest",
       description: "Category Supertest",

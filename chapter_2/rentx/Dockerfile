@@ -8,7 +8,7 @@ WORKDIR /usr/app
 COPY package.json ./
 
 #para baixar as dependencias(poderia ser o Yarn? sim se a imagem tivesse ele)
-RUN npm install
+RUN npm install --force
 
 #Copia tudo que tem aqui para a pasta WORKDIR
 COPY . ./

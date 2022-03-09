@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 
+import { Car } from "@modules/cars/infra/typeorm/entities/Car";
 import { CarsRepositoryInMemory } from "@modules/cars/repositories/in-memory/CarsRepositoryInMemory";
 import { RentalsRepositoryInMemory } from "@modules/rentals/repositories/in-memory/RentalsRepositoryInMemory";
 import { DayjsDateProvider } from "@shared/container/providers/DateProvider/implementations/DayjsDateProvider";
@@ -16,8 +17,9 @@ let dayjsDateProvider: DayjsDateProvider;
 
 describe("Create Rental", () => {
   const dayAdd24Hours = dayjs().add(1, "day").toDate();
+  let carExample: Car;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     dayjsDateProvider = new DayjsDateProvider();
     rentalsRepositoryInMemory = new RentalsRepositoryInMemory();
     carsRepositoryInMemory = new CarsRepositoryInMemory();
@@ -26,12 +28,22 @@ describe("Create Rental", () => {
       carsRepositoryInMemory,
       dayjsDateProvider
     );
+
+    carExample = await carsRepositoryInMemory.create({
+      name: "Impreza",
+      brand: "Subaru",
+      category_id: "1234",
+      daily_rate: 150,
+      description: "Vermelho",
+      fine_amount: 20,
+      license_plate: "HRQ1234",
+    });
   });
 
   it("should be able to create a new rental", async () => {
     const rental = await createRentalUseCase.execute({
       user_id: "1234",
-      car_id: "121212",
+      car_id: carExample.id,
       expected_return_date: dayAdd24Hours,
     });
 
@@ -44,13 +56,13 @@ describe("Create Rental", () => {
       // alguel duplicado para test
       await createRentalUseCase.execute({
         user_id: "1234",
-        car_id: "121212",
+        car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
       });
 
       await createRentalUseCase.execute({
         user_id: "1234",
-        car_id: "121212",
+        car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
       });
     }).rejects.toBeInstanceOf(AppError);
@@ -61,13 +73,13 @@ describe("Create Rental", () => {
       // alguel duplicado para test
       await createRentalUseCase.execute({
         user_id: "123",
-        car_id: "test",
+        car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
       });
 
       await createRentalUseCase.execute({
         user_id: "321",
-        car_id: "test",
+        car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
       });
     }).rejects.toBeInstanceOf(AppError);
@@ -78,7 +90,7 @@ describe("Create Rental", () => {
       // alguel duplicado para test
       await createRentalUseCase.execute({
         user_id: "123",
-        car_id: "test",
+        car_id: carExample.id,
         expected_return_date: dayjs().toDate(),
       });
     }).rejects.toBeInstanceOf(AppError);

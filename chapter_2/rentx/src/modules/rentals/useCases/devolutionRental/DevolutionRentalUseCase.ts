@@ -2,6 +2,7 @@ import { inject } from "tsyringe";
 
 import { ICarsRepository } from "@modules/cars/repositories/ICarsRepository";
 import { IRentalsRepository } from "@modules/rentals/repositories/IRentalsRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
@@ -15,7 +16,10 @@ class DevolutionRentalUseCase {
     private rentalsRepository: IRentalsRepository,
 
     @inject("CarsRepository")
-    private carsRepository: ICarsRepository
+    private carsRepository: ICarsRepository,
+
+    @inject("DayjsDateProvider")
+    private dateProvider: IDateProvider
   ) { }
 
   async execute({ id, user_id }: IRequest) {

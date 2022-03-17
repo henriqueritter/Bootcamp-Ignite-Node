@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
+import { ICompareInDays } from "../dtos/ICompareInDaysParams";
 import { ICompareInHoursParams } from "../dtos/ICompareInHoursParams";
 import { IDateProvider } from "../IDateProvider";
 
@@ -22,6 +23,14 @@ class DayjsDateProvider implements IDateProvider {
     const end_date_utc = this.convertToUTC(end_date);
     const start_date_utc = this.convertToUTC(start_date);
     return dayjs(end_date_utc).diff(start_date_utc, "hours");
+  }
+
+  // retorna diferença em dias
+  compareInDays({ start_date, end_date }: ICompareInDays): number {
+    const start_date_utc = this.convertToUTC(start_date);
+    const end_date_utc = this.convertToUTC(end_date);
+
+    return dayjs(end_date_utc).diff(start_date_utc, "days");
   }
 }
 

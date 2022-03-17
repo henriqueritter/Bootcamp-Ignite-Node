@@ -28,6 +28,13 @@ class DevolutionRentalUseCase {
     if (!rental) {
       throw new AppError("Rental does not exists!");
     }
+
+    // verifica o tempo do aluguel
+    const dateNow = this.dateProvider.dateNow();
+    const diffInHours = this.dateProvider.compareInHours({
+      start_date: dateNow,
+      end_date: rental.expected_return_date,
+    });
   }
 }
 

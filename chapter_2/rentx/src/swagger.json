@@ -89,6 +89,11 @@
         ],
         "summary": "Upload a new category",
         "description": "Upload new category from a csv file",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "multiplar/form-data": {
@@ -118,6 +123,11 @@
         ],
         "summary": "Create a specification",
         "description": "Createa a new specification",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -214,7 +224,22 @@
             }
           },
           "400": {
-            "description": "Email or password incorrect"
+            "description": "Email or password incorrect",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Object with a error message",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error Message",
+                      "example": "Email or password incorrect"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

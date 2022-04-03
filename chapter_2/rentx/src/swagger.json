@@ -136,6 +136,88 @@
           }
         }
       }
+    },
+    "/sessions": {
+      "post": {
+        "tags": [
+          "Sessions"
+        ],
+        "summary": "Authentication user",
+        "description": "Authentication user",
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "User email",
+                    "example": "admin@rentx.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User password",
+                    "example": "123456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Returned object with JWT token",
+                  "required": [
+                    "user",
+                    "token"
+                  ],
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "description": "User object with name and email",
+                      "required": [
+                        "name",
+                        "email"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "User name",
+                          "example": "admin"
+                        },
+                        "email": {
+                          "type": "string",
+                          "description": "User email address",
+                          "example": "admin@rentx.com"
+                        }
+                      }
+                    },
+                    "token": {
+                      "type": "string",
+                      "description": "JWT Token",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2NDc1Njk5MTEsImV4cCI6MTY0NzY1NjMxMSwic3ViIjoiZGVjNzA2ZTktM2I1Ny00Y2JiLWEwOTctMzMwZDEwNzY5ODMwIn0.AlABHefFSkOxB4evcmcOvjGldS1i8l9o3BgFyHSfiEs"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email or password incorrect"
+          }
+        }
+      }
     }
   },
   "definitions": {

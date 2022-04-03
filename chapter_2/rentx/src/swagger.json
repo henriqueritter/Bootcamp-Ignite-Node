@@ -243,6 +243,44 @@
           }
         }
       }
+    },
+    "/cars": {
+      "post": {
+        "description": "Create a new car",
+        "summary": "Create a new car",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "cars"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/definitions/Car"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/CarCreateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Car already exists"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -254,6 +292,94 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "Car": {
+      "type": "object",
+      "description": "Required object to create a new car",
+      "required": [
+        "name",
+        "brand",
+        "daily_rate",
+        "license_plate",
+        "fine_amount",
+        "category_id"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Impreza"
+        },
+        "description": {
+          "type": "string",
+          "example": "Sedan 4 portas"
+        },
+        "daily_rate": {
+          "type": "number",
+          "example": 120.00
+        },
+        "license_plate": {
+          "type": "string",
+          "example": "ABC-1234"
+        },
+        "fine_amount": {
+          "type": "number",
+          "example": 40.0
+        },
+        "brand": {
+          "type": "string",
+          "example": "Subaru"
+        },
+        "category_id": {
+          "type": "string",
+          "example": "1234-eabc-4567-adefc"
+        }
+      }
+    },
+    "CarCreateResponse": {
+      "type": "object",
+      "description": "Response of create a car route",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "8888e9ad-90b3-4c3f-b7a3-fe388026d3ab"
+        },
+        "available": {
+          "type": "boolean",
+          "example": true
+        },
+        "name": {
+          "type": "string",
+          "example": "Impreza"
+        },
+        "description": {
+          "type": "string",
+          "example": "Subaru STI"
+        },
+        "daily_rate": {
+          "type": "number",
+          "example": 120
+        },
+        "license_plate": {
+          "type": "string",
+          "example": "ABC-1234"
+        },
+        "fine_amount": {
+          "type": "number",
+          "example": 50
+        },
+        "brand": {
+          "type": "string",
+          "example": "Subaru"
+        },
+        "category_id": {
+          "type": "string",
+          "example": "1f801247-a5f2-456d-997d-968e42c3fb1b"
+        },
+        "created_at": {
+          "type": "string",
+          "example": "2022-03-17T01:39:54.778Z"
         }
       }
     }

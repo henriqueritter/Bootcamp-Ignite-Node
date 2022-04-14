@@ -277,7 +277,71 @@
             }
           },
           "400": {
-            "description": "Car already exists"
+            "description": "Car already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Object with a error message",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Error Message",
+                      "example": "Car already exists"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cars/images/{id}": {
+      "post": {
+        "tags": [
+          "cars"
+        ],
+        "summary": "Upload images",
+        "description": "Upload images",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Car id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "1e43-5423-ead3-abc1"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
           }
         }
       }

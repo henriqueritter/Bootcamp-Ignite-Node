@@ -52,47 +52,47 @@ describe("Create Rental", () => {
   });
 
   it("should not be able to create a new rental if there is another open rent to the same user", async () => {
-    expect(async () => {
-      // alguel duplicado para test
-      await createRentalUseCase.execute({
-        user_id: "1234",
-        car_id: carExample.id,
-        expected_return_date: dayAdd24Hours,
-      });
+    // alguel duplicado para test
+    await createRentalUseCase.execute({
+      user_id: "1234",
+      car_id: carExample.id,
+      expected_return_date: dayAdd24Hours,
+    });
 
-      await createRentalUseCase.execute({
+    await expect(
+      createRentalUseCase.execute({
         user_id: "1234",
         car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError("Car is unavailable."));
   });
 
   it("should not be able to create a new rental if there is another open rent to the same car", async () => {
-    expect(async () => {
-      // alguel duplicado para test
-      await createRentalUseCase.execute({
-        user_id: "123",
-        car_id: carExample.id,
-        expected_return_date: dayAdd24Hours,
-      });
+    // alguel duplicado para test
+    await createRentalUseCase.execute({
+      user_id: "123",
+      car_id: carExample.id,
+      expected_return_date: dayAdd24Hours,
+    });
 
-      await createRentalUseCase.execute({
+    await expect(
+      createRentalUseCase.execute({
         user_id: "321",
         car_id: carExample.id,
         expected_return_date: dayAdd24Hours,
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError("Car is unavailable."));
   });
 
   it("should not be able to create a new rental with invalid return time", async () => {
-    expect(async () => {
-      // alguel duplicado para test
-      await createRentalUseCase.execute({
+    // alguel duplicado para test
+    await expect(
+      createRentalUseCase.execute({
         user_id: "123",
         car_id: carExample.id,
         expected_return_date: dayjs().toDate(),
-      });
-    }).rejects.toBeInstanceOf(AppError);
+      })
+    ).rejects.toEqual(new AppError("Invalid return time."));
   });
 });

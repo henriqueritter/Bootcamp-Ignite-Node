@@ -20,6 +20,7 @@ class RentalsRepository implements IRentalsRepository {
 
   async findOpenRentalByUser(user_id: string): Promise<Rental> {
     const openByUser = await this.repository.findOne({
+      // verifica se o aluguel esta em aberto
       where: { user_id, end_date: null },
     });
     return openByUser;

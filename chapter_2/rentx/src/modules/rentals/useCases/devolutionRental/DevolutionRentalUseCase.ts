@@ -21,7 +21,9 @@ class DevolutionRentalUseCase {
 
     @inject("DayjsDateProvider")
     private dateProvider: IDateProvider
-  ) { }
+  ) {
+    //
+  }
 
   async execute({ id, user_id }: IRequest): Promise<Rental> {
     // recupera o aluguel do banco de dados
@@ -33,6 +35,10 @@ class DevolutionRentalUseCase {
     // caso o aluguel nao exista retorna um erro
     if (!rental) {
       throw new AppError("Rental does not exists!");
+    }
+
+    if (rental.user_id != user_id) {
+      throw new AppError("Rental does not belong to this user.");
     }
 
     // recupera o carro usado no aluguel

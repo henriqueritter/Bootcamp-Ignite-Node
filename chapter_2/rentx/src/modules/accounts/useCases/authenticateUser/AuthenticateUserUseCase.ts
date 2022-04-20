@@ -2,6 +2,7 @@ import { compare } from "bcrypt";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 
+import auth from "@config/auth"; // infos para o token
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 import { AppError } from "@shared/errors/AppError";
@@ -42,9 +43,20 @@ class AuthenticateUserUseCase {
       throw new AppError("Email or password incorrect");
     }
     // generate JWT
-    const token = sign({}, "9eb71ab7420eb452a22787ca4fab501b", {
+    const token = sign({}, auth.secret_token, {
       subject: user.id,
-      expiresIn: "1d",
+      expiresIn: auth.expires_in_token,
+    });
+
+    const refresh_token = sign({ email }, auth.secret_refresh_token, {
+      subject: user.id,
+      expiresIn: auth.expires_in_refresh_token,
+    });
+
+    await this.usersTokensRepository.create({
+      user_id: user.id,
+      expires_date,
+      refresh_token,
     });
 
     const tokenReturn: IResponse = {

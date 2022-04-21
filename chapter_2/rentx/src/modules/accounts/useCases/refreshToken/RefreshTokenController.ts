@@ -11,8 +11,10 @@ class RefreshTokenController {
       request.headers["x-access-token"] ||
       request.query.token;
 
+    // instancia o useCAse
     const refreshTokenUseCase = container.resolve(RefreshTokenUseCase);
 
+    // executa o metodo do useCase passando o token
     const refresh_token = await refreshTokenUseCase.execute(token);
 
     return response.json(refresh_token);

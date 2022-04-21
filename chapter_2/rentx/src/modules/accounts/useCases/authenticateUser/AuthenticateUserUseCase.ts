@@ -5,6 +5,7 @@ import { inject, injectable } from "tsyringe";
 import auth from "@config/auth"; // infos para o token
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 import { AppError } from "@shared/errors/AppError";
 
 interface IRequest {
@@ -18,6 +19,7 @@ interface IResponse {
     email: string;
   };
   token: string;
+  refresh_token: string;
 }
 @injectable()
 class AuthenticateUserUseCase {
@@ -26,7 +28,10 @@ class AuthenticateUserUseCase {
     private usersRepository: IUsersRepository,
 
     @inject("UsersTokensRepository")
-    private usersTokensRepository: IUsersTokensRepository
+    private usersTokensRepository: IUsersTokensRepository,
+
+    @inject("DayjsDateProvider")
+    private dateProvider: IDateProvider
   ) { }
 
   async execute({ email, password }: IRequest): Promise<IResponse> {
@@ -42,21 +47,28 @@ class AuthenticateUserUseCase {
     if (!passwordMatch) {
       throw new AppError("Email or password incorrect");
     }
-    // generate JWT
+    // generate JWT que expira em 15min
     const token = sign({}, auth.secret_token, {
       subject: user.id,
       expiresIn: auth.expires_in_token,
     });
 
+    // cria o token que expira em 30 dias
     const refresh_token = sign({ email }, auth.secret_refresh_token, {
       subject: user.id,
       expiresIn: auth.expires_in_refresh_token,
     });
 
+    // cria a data de expiração do refresh token
+    const refresh_token_expires_date = this.dateProvider.addDays(
+      auth.expires_refresh_token_days
+    );
+
+    // cria um refresh token
     await this.usersTokensRepository.create({
       user_id: user.id,
-      expires_date,
-      refresh_token,
+      expires_date: refresh_token_expires_date,
+      refresh_token, // vai passar o token que expira em 15min
     });
 
     const tokenReturn: IResponse = {
@@ -65,6 +77,7 @@ class AuthenticateUserUseCase {
         email: user.email,
       },
       token,
+      refresh_token,
     };
 
     return tokenReturn;

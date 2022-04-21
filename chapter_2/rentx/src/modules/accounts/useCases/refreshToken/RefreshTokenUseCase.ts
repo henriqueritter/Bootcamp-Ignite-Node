@@ -22,15 +22,17 @@ class RefreshTokenUseCase {
     // recupera somente o userid do sub
     const user_id = decode.sub;
     // procura pelo usuario no repositorio de tokens
-    const userTokens =
+    const userToken =
       await this.usersTokensRepository.findByUserIdAndRefreshToken(
         user_id,
         token
       );
-    if (!userTokens) {
+    if (!userToken) {
       // se nao encontrar usuario na tabela de refresh token estoura um erro
       throw new AppError("Refresh Token does not exists!");
     }
+
+    await this.usersTokensRepository.deleteById(userToken.id);
   }
 }
 

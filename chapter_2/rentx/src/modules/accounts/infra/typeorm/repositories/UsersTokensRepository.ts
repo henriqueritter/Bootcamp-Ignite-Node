@@ -28,6 +28,7 @@ class UsersTokensRepository implements IUsersTokensRepository {
     return userToken;
   }
 
+  // procura o usuario com o token informado
   async findByUserIdAndRefreshToken(
     user_id: string,
     refresh_token: string
@@ -38,6 +39,10 @@ class UsersTokensRepository implements IUsersTokensRepository {
     });
 
     return userTokens;
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await this.repository.delete(id);
   }
 }
 

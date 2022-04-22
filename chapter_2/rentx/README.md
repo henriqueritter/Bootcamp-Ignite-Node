@@ -91,3 +91,15 @@ Deve ser possível realizar a busca de todos os alugueis para o usuaŕio
 
 **RN**
 O usuário deve estar logado
+
+
+# Recuperar Senha
+
+**RF**
+Deve ser possível o usuário recuperar a senhaainformando o e-mail.
+O Usuáriodeve receber um e-mail com o passo a passo para a recuperação da senha
+O usuário deve conseguir inserir uma nova senha
+
+**RN**
+O Usuário precisa informar uma novas enha
+O Link enviadopara recuperar a senha deve expirar em 3 horas

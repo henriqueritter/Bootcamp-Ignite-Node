@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { IUsersRepository } from "@modules/accounts/repositories/IUsersRepository";
 import { IUsersTokensRepository } from "@modules/accounts/repositories/IUsersTokensRepository";
 import { AppError } from "@shared/errors/AppError";
+import { IDateProvider } from "@shared/container/providers/DateProvider/IDateProvider";
 
 @injectable()
 class SendForgotPasswordMailUseCase {
@@ -12,7 +13,10 @@ class SendForgotPasswordMailUseCase {
     private usersRepository: IUsersRepository,
 
     @inject("UsersTokensRepository")
-    private usersTokensRepository: IUsersTokensRepository
+    private usersTokensRepository: IUsersTokensRepository,
+
+    @inject("DayjsDateProvider")
+    private dateProvider: IDateProvider
   ) { }
 
   async execute(email: string) {
@@ -23,9 +27,11 @@ class SendForgotPasswordMailUseCase {
 
     const token = uuidv4();
 
+
     await this.usersTokensRepository.create({
       refresh_token: token,
       user_id: user.id,
+      expires_date:
     });
   }
 }

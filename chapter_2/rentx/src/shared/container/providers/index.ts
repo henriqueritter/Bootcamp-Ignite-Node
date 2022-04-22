@@ -10,7 +10,8 @@ container.registerSingleton<IDateProvider>(
   DayjsDateProvider
 );
 
-container.registerSingleton<IMailProvider>(
+// o Ethereal precisa ser registrado logo que a aplicação é iniciada por isso é como registerInstance e instanciamos o etherealMailprovider
+container.registerInstance<IMailProvider>(
   "EtherealMailProvider",
-  EtherealMailProvider
+  new EtherealMailProvider()
 );

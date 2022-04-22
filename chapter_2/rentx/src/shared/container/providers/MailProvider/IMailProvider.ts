@@ -1,6 +1,8 @@
+import { ISendEmailDTO } from "./dtos/ISendEmailDTO";
+
 interface IMailProvider {
   // TODO alterar para um DTO
-  sendMail(to: string, subject: string, body: string): Promise<void>;
+  sendMail({ to, subject, body }: ISendEmailDTO): Promise<void>;
 }
 
 export { IMailProvider };

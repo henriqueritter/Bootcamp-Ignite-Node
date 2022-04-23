@@ -1,4 +1,6 @@
 // import nodemailer e transporter
+import fs from "fs"; // para usar o template do handlebars
+import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
 import { injectable } from "tsyringe";
 
@@ -30,14 +32,27 @@ class EtherealMailProvider implements IMailProvider {
       .catch((err) => console.error(err));
   }
 
-  async sendMail({ to, subject, body }: ISendEmailDTO): Promise<void> {
+  async sendMail({
+    to,
+    subject,
+    variables,
+    path,
+  }: ISendEmailDTO): Promise<void> {
+    // recupera o template
+    const templateFileContent = fs.readFileSync(path).toString("utf-8");
+
+    // leitura/compilacao do handlebars do nosso arquivo
+    const templateParse = handlebars.compile(templateFileContent);
+
+    // gerando o HTML com as variaveis
+    const templateHTML = templateParse(variables);
+
     // envia a mensagem com as infos repassadas
     const message = await this.client.sendMail({
       to,
       from: "Rentx <noreplay@rentx.com.br>",
       subject,
-      text: body,
-      html: body,
+      html: templateHTML,
     });
 
     // para visualizar a msg no console

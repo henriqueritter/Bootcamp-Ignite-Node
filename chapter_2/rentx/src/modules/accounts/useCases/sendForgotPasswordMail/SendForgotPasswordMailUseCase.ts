@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { inject, injectable } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
 
@@ -29,6 +30,16 @@ class SendForgotPasswordMailUseCase {
     if (!user) {
       throw new AppError("User does not exists!");
     }
+
+    // recupera o template
+    const templatePath = resolve(
+      __dirname,
+      "..",
+      "..",
+      "views",
+      "emails",
+      "forgotPassword.hbs"
+    );
     // cria um token aleatorio como uuid
     const token = uuidv4();
 
@@ -42,6 +53,11 @@ class SendForgotPasswordMailUseCase {
       user_id: user.id,
       expires_date,
     });
+
+    const variables = {
+      name: user.name,
+      link: `http://localhost:3333/password/reset?token=${token}`,
+    };
 
     await this.mailProvider.sendMail({
       to: email,

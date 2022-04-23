@@ -1,6 +1,7 @@
 interface ISendEmailDTO {
   to: string;
   subject: string;
-  body: string;
+  variables: any;
+  path: string;
 }
 export { ISendEmailDTO };

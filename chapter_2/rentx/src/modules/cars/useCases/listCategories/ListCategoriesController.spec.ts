@@ -34,7 +34,7 @@ describe("List Categories", () => {
       password: "admin",
     });
 
-    const { token } = responseToken.body;
+    const { refresh_token } = responseToken.body;
 
     // cria uma category como massa de test
     const responseCreate = await request(app)
@@ -44,7 +44,7 @@ describe("List Categories", () => {
         description: "Category Supertest",
       })
       .set({
-        Authorization: `Bearer: ${token}`,
+        Authorization: `Bearer: ${refresh_token}`,
       });
 
     // expect(responseCreate.status).toBe(201);

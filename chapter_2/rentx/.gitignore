@@ -1,3 +1,5 @@
 /tmp/cars/*
 /tmp/avatar/*
 /coverage
+
+.env

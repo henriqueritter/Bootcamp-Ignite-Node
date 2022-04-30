@@ -30,7 +30,7 @@ class User {
 
   // Expose da lib class-transformer
   @Expose({ name: "avatar_url" })
-  getAvatarUrl(): string {
+  avatar_url(): string {
     switch (process.env.disk) {
       case "s3":
         return `${process.env.AWS_BUCKET_URL}/avatar/${this.avatar}`;

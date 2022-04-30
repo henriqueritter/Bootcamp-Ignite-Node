@@ -17,6 +17,7 @@ class ProfileUserUseCase {
   }
   async execute({ user_id }: IRequest): Promise<IUserResponseDTO> {
     const user = await this.usersRepository.findById(user_id);
+    // mapeia o usuario para retornar apenas as props do mapper incluindo a url de avatar
     return UserMap.toDTO(user);
   }
 }

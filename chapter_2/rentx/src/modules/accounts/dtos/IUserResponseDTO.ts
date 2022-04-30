@@ -1,0 +1,7 @@
+export interface IUserResponseDTO {
+  id: string;
+  email: string;
+  name: string;
+  avatar: string;
+  driver_license: string;
+}

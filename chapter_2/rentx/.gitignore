@@ -1,5 +1,7 @@
 /tmp/cars/*
 /tmp/avatar/*
+/tmp/**.png
+
 /coverage
 
 .env

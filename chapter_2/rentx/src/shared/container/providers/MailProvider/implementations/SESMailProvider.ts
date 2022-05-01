@@ -28,26 +28,21 @@ class SESMailProvider implements IMailProvider {
     variables,
     path,
   }: ISendEmailDTO): Promise<void> {
-    // recupera o template
+    // template handlebars
     const templateFileContent = fs.readFileSync(path).toString("utf-8");
 
-    // leitura/compilacao do handlebars do nosso arquivo
     const templateParse = handlebars.compile(templateFileContent);
 
-    // gerando o HTML com as variaveis
+    // gerando o HTML com o handlebars
     const templateHTML = templateParse(variables);
 
-    // envia a mensagem com as infos repassadas
-    const message = await this.client.sendMail({
+    // envia a mensagem usando o email
+    await this.client.sendMail({
       to,
       from: "Rentx <noreplay@henriqueritter.com>",
       subject,
       html: templateHTML,
     });
-
-    // para visualizar a msg no console
-    console.log("message send: %s", message.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(message));
   }
 }
 

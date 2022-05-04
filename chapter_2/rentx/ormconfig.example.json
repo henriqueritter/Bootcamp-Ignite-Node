@@ -7,11 +7,14 @@
   "database": "rentx",
   "entities": [
     "./src/modules/**/entities/*.ts"
+    //"./dist/modules/**/entities/*.ts" //para ambiente prod
   ],
   "migrations": [
     "./src/shared/infra/typeorm/migrations/*.ts"
+    //"./dist/shared/infra/typeorm/migrations/*.ts" //para ambiente prod
   ],
   "cli": {
     "migrationsDir": "./src/shared/infra/typeorm/migrations"
+    //"./dist/shared/infra/typeorm/migrations"   //para ambiente prod
   }
 }

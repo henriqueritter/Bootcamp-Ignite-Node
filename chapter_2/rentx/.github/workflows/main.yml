@@ -1,0 +1,39 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  push:
+    branches: [master] # so vamos rodar quando houver push na branch master
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest #vamos rodar em uma instancia do ubuntu igual o que ha no nosso EC2
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Nodejs #setup do node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+        #atualiza as dependencias
+      - name: Install Dependencies
+        run: yarn
+
+        #transpila o codigo com o babel
+      - name: Build
+        run: yarn build
+
+        #copia para a instancia do Ec2
+      - uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "., !node_modules" #ignora pasta node_modules
+          target: "test"

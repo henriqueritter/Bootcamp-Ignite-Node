@@ -2,32 +2,40 @@ version: "3.7"
 #este arquivo precisa ser identado
 
 services:
-  database: #vamos colocar o banco primeiro pois  a aplicação dependerá do  BD para subir
+  database:
+    #vamos colocar o banco primeiro pois  a aplicação dependerá do  BD para subir
     image: postgres
-    container_name: database_ignite  #nome do nosso container usando a imagem postgres
+    container_name: database_ignite #nome do nosso container usando a imagem postgres
     restart: always #sempre reiniciar nosso container se ele for parado
     ports:
-      - 5432:5432  #5432 da maquina local para a 5432 do container
-    environment:  #variaveis ambiente do postgres
-      - POSTGRES_USER=docker      #cria usuario docker
-      - POSTGRES_PASSWORD=ignite  #senha
-      - POSTGRES_DB=rentx         #nome do bd
-    volumes: 
+      - 5432:5432 #5432 da maquina local para a 5432 do container
+    environment:
+      #variaveis ambiente do postgres
+      - POSTGRES_USER=docker #cria usuario docker
+      - POSTGRES_PASSWORD=ignite #senha
+      - POSTGRES_DB=rentx #nome do bd
+    volumes:
       - pgdata:/data/postgres
 
-  app: #nome do serviço
-    build: .  #seria a mesma coisa que executar na mao o 'docker build -t rentx .'
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+  app:
+    #nome do serviço
+    build: . #seria a mesma coisa que executar na mao o 'docker build -t rentx .'
     container_name: rentx
     ports:
       - 3333:3333
-    volumes: #nosso workdir
-      - .:/usr/app    #pega do diretorio atual e envia para /usr/app  (origem:destino)
-    links: #propriedade que define a rede para trabalhar
+    volumes:
+      #nosso workdir
+      - .:/usr/app #pega do diretorio atual e envia para /usr/app  (origem:destino)
+    links:
+      #propriedade que define a rede para trabalhar
       - database
-    depends_on: 
+    depends_on:
       - database
 #volume criado dentro do nosso container, será usado pelo postgres
 volumes:
   pgdata:
     driver: local #poderia passar caminho externo
-

@@ -33,8 +33,10 @@ services:
     links:
       #propriedade que define a rede para trabalhar
       - database
+      - redis
     depends_on:
       - database
+      - redis
 #volume criado dentro do nosso container, será usado pelo postgres
 volumes:
   pgdata:

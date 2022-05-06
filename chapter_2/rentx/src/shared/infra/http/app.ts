@@ -9,6 +9,7 @@ import "@shared/container"; // para injecao de depencia com o tsyringe
 // appError class criada para tratar os erros com message e statusCode
 import upload from "@config/upload";
 import { AppError } from "@shared/errors/AppError";
+import rateLimiter from "@shared/infra/http/middlewares/rateLimiter"; // middleware
 import createConnection from "@shared/infra/typeorm";
 
 import swaggerFile from "../../../swagger.json";
@@ -20,6 +21,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors());
+app.use(rateLimiter); // middleware
 // app.use("rota da documentacao"),  passa o swagger.serve e o setup com o arquivo json de configuracao
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 // express static le a pasta

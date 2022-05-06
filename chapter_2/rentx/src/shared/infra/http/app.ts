@@ -5,9 +5,14 @@ import "express-async-errors"; // para tratar os erros
 import swaggerUi from "swagger-ui-express";
 import "dotenv/config"; // para carregar as variaveis de ambiente
 
+import upload from "@config/upload";
+// sentry
+import * as Sentry from "@sentry/node";
+import * as Tracing from "@sentry/tracing";
+
 import "@shared/container"; // para injecao de depencia com o tsyringe
 // appError class criada para tratar os erros com message e statusCode
-import upload from "@config/upload";
+
 import { AppError } from "@shared/errors/AppError";
 import rateLimiter from "@shared/infra/http/middlewares/rateLimiter"; // middleware
 import createConnection from "@shared/infra/typeorm";
@@ -17,6 +22,17 @@ import { router } from "./routes";
 
 createConnection(); // cria a conexao com o banco de dados
 const app = express();
+
+Sentry.init({
+  dsn: "https://7096d59949574a12a8e37d4a4c28eea1@o1234221.ingest.sentry.io/6383444",
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: 1.0,
+});
 
 app.use(express.json());
 

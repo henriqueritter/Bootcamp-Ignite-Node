@@ -48,9 +48,8 @@ app.use("/cars", express.static(`${upload.tmpFolder}/cars`));
 
 app.use(cors());
 
-app.use(router);
-
 app.use(Sentry.Handlers.errorHandler());
+app.use(router);
 
 // middleware de erro, erro sempre vem primeiro
 app.use(

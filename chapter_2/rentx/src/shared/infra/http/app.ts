@@ -23,8 +23,10 @@ import { router } from "./routes";
 createConnection(); // cria a conexao com o banco de dados
 const app = express();
 
+app.use(rateLimiter); // middleware rate limiter
+// sentry
 Sentry.init({
-  dsn: "https://7096d59949574a12a8e37d4a4c28eea1@o1234221.ingest.sentry.io/6383444",
+  dsn: process.env.SENTRY_DSN,
   integrations: [
     // enable HTTP calls tracing
     new Sentry.Integrations.Http({ tracing: true }),
@@ -33,18 +35,22 @@ Sentry.init({
   ],
   tracesSampleRate: 1.0,
 });
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 app.use(express.json());
 
-app.use(cors());
-app.use(rateLimiter); // middleware
 // app.use("rota da documentacao"),  passa o swagger.serve e o setup com o arquivo json de configuracao
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 // express static le a pasta
 app.use("/avatar", express.static(`${upload.tmpFolder}/avatar`));
 app.use("/cars", express.static(`${upload.tmpFolder}/cars`));
 
+app.use(cors());
+
 app.use(router);
+
+app.use(Sentry.Handlers.errorHandler());
 
 // middleware de erro, erro sempre vem primeiro
 app.use(

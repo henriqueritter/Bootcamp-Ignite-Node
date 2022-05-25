@@ -18,7 +18,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       id,
       name,
       grade,
-      created_at: new Date(),
+      created_at: new Date().getTime(),
     }
   }).promise(); //o put nao retorna nenhuma informacao quando cria
 
@@ -33,8 +33,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   return {
     statusCode: 201,
-    body: JSON.stringify({
-      message: JSON.stringify(response.Items[0]) //retorna o primeiro item do nosso documento criado
-    })
+    body: JSON.stringify(response.Items[0]) //retorna o primeiro item do nosso documento criado
   }
 }

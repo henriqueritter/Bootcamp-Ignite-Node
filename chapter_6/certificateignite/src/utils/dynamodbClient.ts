@@ -3,7 +3,10 @@ import { DynamoDB } from 'aws-sdk';
 
 const options = {
   region: "localhost",
-  endpoint: "http://localhost:8000", //8000 porta padrao do dynamo
+  endpoint: "http://localhost:8000", //8000 porta padrao do dynamo,
+  //necessario para rodar locamente para permitir criar dynamo localmente sem credencial AWS 
+  accessKeyId: "x",
+  secretAccessKey: "x"
 }
 
 const isOffline = () => {

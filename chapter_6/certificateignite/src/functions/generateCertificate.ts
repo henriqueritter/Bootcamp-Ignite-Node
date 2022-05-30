@@ -1,11 +1,36 @@
 import { APIGatewayProxyHandler } from "aws-lambda"
 import { document } from '../utils/dynamodbClient'
+import * as handlebars from 'handlebars';
 
+//para recuperar o template do certificado
+import { join } from 'path';
+//para ler o template
+import { readFileSync } from 'fs';
 interface ICreateCertificate {
   id: string;
   name: string;
   grade: string;
 }
+
+interface ITemplate {
+  id: string;
+  name: string;
+  grade: string;
+  medal: string;
+  date: string;
+}
+
+//compila o handlebars com as informacoes
+const compile = (data: ITemplate) => {
+  //process.cwd() parte a raiz do projeto
+  const templateFilePath = join(process.cwd(), "src", "templates", "certificates.hbs");
+
+  const htmlTemplate = readFileSync(templateFilePath, "utf-8");
+
+  return handlebars(htmlTemplate);
+
+}
+
 //aws sempre envia na structure event
 export const handler: APIGatewayProxyHandler = async (event) => {
   //vamos receber id, name e grade do alune

@@ -1,6 +1,9 @@
 import { APIGatewayProxyHandler } from "aws-lambda"
 import { document } from '../utils/dynamodbClient'
-import * as handlebars from 'handlebars';
+import { compile } from 'handlebars';
+
+//para gerar a data do certificado
+import * as dayjs from "dayjs";
 
 //para recuperar o template do certificado
 import { join } from 'path';
@@ -21,13 +24,14 @@ interface ITemplate {
 }
 
 //compila o handlebars com as informacoes
-const compile = (data: ITemplate) => {
+const compileTemplate = async (data: ITemplate) => {
   //process.cwd() parte a raiz do projeto
   const templateFilePath = join(process.cwd(), "src", "templates", "certificates.hbs");
 
   const htmlTemplate = readFileSync(templateFilePath, "utf-8");
 
-  return handlebars(htmlTemplate);
+  //compila o template com as informacoes do data
+  return compile(htmlTemplate)(data);
 
 }
 
@@ -54,6 +58,23 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       ":id": id
     }
   }).promise(); //o query retorna um array com todos os elementos, mas como tem uma condition ele vai trazer aquilo que estamos buscando na posicao zero do array
+
+  //recupera o selo.png
+  const medalPath = join(process.cwd(), "src", "templates", "selo.png");
+
+  //converte em base64 para colocar no template do handlebars
+  const medal = readFileSync(medalPath, "base64");
+
+  //cria o objeto data
+  const data: ITemplate = {
+    name,
+    id,
+    grade,
+    date: dayjs().format("DD/MM/YYYY"), //gera a data atual
+    medal
+  }
+
+  const content = await compileTemplate(data);
 
 
   return {

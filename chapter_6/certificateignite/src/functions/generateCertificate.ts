@@ -2,8 +2,11 @@ import { APIGatewayProxyHandler } from "aws-lambda"
 import { document } from '../utils/dynamodbClient'
 import { compile } from 'handlebars';
 
+//para gerar pdf
+import chromium from "chrome-aws-lambda";
+
 //para gerar a data do certificado
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 //para recuperar o template do certificado
 import { join } from 'path';
@@ -75,6 +78,18 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   }
 
   const content = await compileTemplate(data);
+
+
+  const browser = await chromium.puppeteer.launch({
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless, //roda ele em background
+  });
+
+  const page = browser.newPage();
+
+  await page.setContent(content);
 
 
   return {

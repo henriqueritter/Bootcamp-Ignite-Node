@@ -2,6 +2,9 @@ import { APIGatewayProxyHandler } from "aws-lambda"
 import { document } from '../utils/dynamodbClient'
 import { compile } from 'handlebars';
 
+//S3 para salvar o certificado
+import { S3 } from 'aws-sdk';
+
 //para gerar pdf
 import chromium from "chrome-aws-lambda";
 
@@ -91,7 +94,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   await page.setContent(content);
 
-  const pdf = await page.pdf({
+  const pdfFile = await page.pdf({
     format: "a4",
     landscape: true,
     printBackground: true, //imprime o background do arquivo conforme definido no html
@@ -100,6 +103,17 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   });
 
   await browser.close();
+
+  //para salvar o certificado.pdf no bucket no S3
+  const s3 = new S3();
+
+  await s3.putObject({
+    Bucket: "certificateignite2022",
+    Key: `${id}.pdf`,
+    ACL: "public-read",
+    Body: pdfFile,
+    ContentType: "application/pdf"
+  }).promise();
 
   return {
     statusCode: 201,

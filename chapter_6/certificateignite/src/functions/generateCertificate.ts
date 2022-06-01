@@ -90,6 +90,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const page = await browser.newPage();
 
   await page.setContent(content);
+
   const pdf = await page.pdf({
     format: "a4",
     landscape: true,
@@ -99,7 +100,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   });
 
   await browser.close();
-
 
   return {
     statusCode: 201,

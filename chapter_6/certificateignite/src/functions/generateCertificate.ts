@@ -29,7 +29,7 @@ interface ITemplate {
 //compila o handlebars com as informacoes
 const compileTemplate = async (data: ITemplate) => {
   //process.cwd() parte a raiz do projeto
-  const templateFilePath = join(process.cwd(), "src", "templates", "certificates.hbs");
+  const templateFilePath = join(process.cwd(), "src", "templates", "certificate.hbs");
 
   const htmlTemplate = readFileSync(templateFilePath, "utf-8");
 
@@ -84,12 +84,21 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath,
-    headless: chromium.headless, //roda ele em background
+    //headless: chromium.headless, //roda ele em background
   });
 
-  const page = browser.newPage();
+  const page = await browser.newPage();
 
   await page.setContent(content);
+  const pdf = await page.pdf({
+    format: "a4",
+    landscape: true,
+    printBackground: true, //imprime o background do arquivo conforme definido no html
+    preferCSSPageSize: true, //força para que seja do tamanho definido no @page do HTML do template do handlebars
+    path: process.env.IS_OFFLINE ? "./certificate.pdf" : null, //gera certificado localmente
+  });
+
+  await browser.close();
 
 
   return {

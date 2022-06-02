@@ -117,6 +117,11 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   //para salvar o certificado.pdf no bucket no S3
   const s3 = new S3();
 
+  //  //para criar o bucket 
+  //await s3.createBucket({
+  //  Bucket: "certificateignite2022"
+  //}).promise();
+
   await s3.putObject({
     Bucket: "certificateignite2022",
     Key: `${id}.pdf`,
@@ -127,6 +132,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
   return {
     statusCode: 201,
-    body: JSON.stringify(response.Items[0]) //retorna o primeiro item do nosso documento criado
+    body: JSON.stringify({
+      message: "Certificado criado com sucesso.",
+      url: `https://certificateignite2022.s3.amazonaws.com/${id}.pdf`
+    }) //retorna o primeiro item do nosso documento criado
   }
 }

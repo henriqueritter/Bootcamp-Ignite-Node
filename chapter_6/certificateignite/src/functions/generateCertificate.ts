@@ -46,16 +46,6 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   //vamos receber id, name e grade do alune
   const { id, name, grade } = JSON.parse(event.body) as ICreateCertificate;
 
-  //usamos o put para inserir dados na table
-  await document.put({
-    TableName: "users_certificate", // passamos o nome da  table
-    Item: {         //e quais informacoes vamos inserir
-      id,
-      name,
-      grade,
-      created_at: new Date().getTime(),
-    }
-  }).promise(); //o put nao retorna nenhuma informacao quando cria
 
   const response = await document.query({
     TableName: "users_certificate",
@@ -64,6 +54,26 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       ":id": id
     }
   }).promise(); //o query retorna um array com todos os elementos, mas como tem uma condition ele vai trazer aquilo que estamos buscando na posicao zero do array
+
+  //recupera o id do aluno para ver se ele nao existe
+  const userAlreadyExists = response.Items[0];
+
+  //se o aluno nao existir entao cria ele na base
+  if (!userAlreadyExists) {
+    //usamos o put para inserir dados na table
+    await document.put({
+      TableName: "users_certificate", // passamos o nome da  table
+      Item: {         //e quais informacoes vamos inserir
+        id,
+        name,
+        grade,
+        created_at: new Date().getTime(),
+      }
+    }).promise(); //o put nao retorna nenhuma informacao quando cria
+
+  }
+
+
 
   //recupera o selo.png
   const medalPath = join(process.cwd(), "src", "templates", "selo.png");

@@ -32,6 +32,11 @@ const serverlessConfiguration: AWS = {
     ]
 
   },
+  //para montar o zip para deploy
+  package: {
+    individually: false, //gera tudo em um unico zip
+    include: [".src/templates/**"] //qualquer arquivo que existir na pasta template sera incluido no zip
+  },
   // import the function via paths
   functions: {
     generateCertificate: {
@@ -59,7 +64,6 @@ const serverlessConfiguration: AWS = {
       ]
     }
   },
-  package: { individually: true },
   custom: {
     esbuild: {
       bundle: true,
